@@ -15,6 +15,7 @@ import {
 } from "../consts";
 import { Alert } from "react-native";
 import jwtDecoder from "jwt-decode";
+import * as Linking from "expo-linking";
 
 interface LandingScreenProps {
   onLayout: () => void;

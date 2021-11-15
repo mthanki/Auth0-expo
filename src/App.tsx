@@ -11,6 +11,7 @@ import { ID_TOKEN_KEY } from "./consts";
 import { User } from "./types";
 import HomeScreen from "./screens/HomeScreen";
 import { Button } from "react-native-ui-lib";
+import * as Linking from "expo-linking";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
@@ -69,8 +70,14 @@ export default function App() {
     return null;
   }
 
+  const prefix = Linking.createURL("/https");
+
+  const linking = {
+    prefixes: [prefix],
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator>
         {token && user ? (
           <>
