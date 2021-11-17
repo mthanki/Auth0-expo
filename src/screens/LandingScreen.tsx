@@ -15,7 +15,6 @@ import {
 } from "../consts";
 import { Alert } from "react-native";
 import jwtDecoder from "jwt-decode";
-import * as Linking from "expo-linking";
 
 interface LandingScreenProps {
   onLayout: () => void;
@@ -30,9 +29,6 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onLayout, onLogin }) => {
       (await Random.getRandomBytesAsync(16)) as any
     );
     await SecureStore.setItemAsync(NONCE_KEY, nonce);
-    // SecureStore.getItemAsync(NONCE_KEY).then((savedNonce) => {
-    //   console.log(savedNonce);
-    // });
     return nonce;
   };
 

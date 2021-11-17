@@ -1,7 +1,13 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { RootStackParamList } from "../services/navigation";
-import { View, LoaderScreen, Button } from "react-native-ui-lib";
+import {
+  View,
+  LoaderScreen,
+  Button,
+  ActionSheet,
+  ColorName,
+} from "react-native-ui-lib";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { GRAPHQL_ENDPOINT } from "../consts";
@@ -17,8 +23,15 @@ interface HomeScreenProps {
   onLogout: () => void;
 }
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ token, user, onLogout }) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({
+  token,
+  user,
+  onLogout,
+  navigation,
+}) => {
   const [client, setClient] = useState<any>(null);
+  // unused currently
+  const [showOptions, setShowOptions] = useState<boolean>(false);
 
   useEffect(() => {
     const { id, name, isNewUser } = user;
@@ -40,6 +53,28 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ token, user, onLogout }) => {
     setClient(client);
   }, []);
 
+  // Just some UI elements for later use
+  const actionSheet = (
+    <ActionSheet
+      title={"Options"}
+      message={"Message of action sheet"}
+      cancelButtonIndex={3}
+      destructiveButtonIndex={0}
+      useNativeIOS={false}
+      options={[
+        { label: "Upgrade", onPress: () => navigation.push("Payment") },
+        {
+          label: "Logout",
+          onPress: onLogout,
+        },
+        { label: "Cancel", onPress: () => setShowOptions(false) },
+      ]}
+      dialogStyle={{ height: 300 }}
+      visible={showOptions}
+      onDismiss={() => setShowOptions(false)}
+    />
+  );
+
   if (!client) {
     return (
       <View flex>
@@ -50,6 +85,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ token, user, onLogout }) => {
 
   return (
     <ApolloProvider client={client}>
+      <Button
+        margin-25
+        label="Get Premium"
+        backgroundColor="green"
+        onPress={() => navigation.push("Payment")}
+      />
       <View flex center>
         <TodoList />
       </View>

@@ -3,11 +3,12 @@ import { User } from "../types";
 
 export type RootStackParamList = {
 	Landing: undefined,
-    HomeScreen: {
+    Home: {
         token: String | null,
         user: User,
         onLogout: () => void,
     }
+    Payment: undefined,
 }
 
 export const Stack = createNativeStackNavigator<RootStackParamList>();

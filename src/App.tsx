@@ -12,6 +12,7 @@ import { User } from "./types";
 import HomeScreen from "./screens/HomeScreen";
 import { Button } from "react-native-ui-lib";
 import * as Linking from "expo-linking";
+import PaymentScreen from "./screens/PaymentScreen";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
@@ -82,7 +83,7 @@ export default function App() {
         {token && user ? (
           <>
             <Stack.Screen
-              name={"HomeScreen"}
+              name={"Home"}
               options={{
                 title: `${user.name}'s Todos`,
                 headerRight: () => (
@@ -102,6 +103,9 @@ export default function App() {
                   {...props}
                 />
               )}
+            </Stack.Screen>
+            <Stack.Screen name={"Payment"} options={{ headerShown: true }}>
+              {(props) => <PaymentScreen {...props} />}
             </Stack.Screen>
           </>
         ) : (
