@@ -19,6 +19,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
   return (
     <View>
       <Card
+        style={updateLoading && styles.loading}
         onPress={() => {
           if (!updateLoading) {
             updateTodo({
@@ -48,6 +49,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
 const styles = StyleSheet.create({
   done: {
     opacity: 0.3,
+  },
+  loading: {
+    backgroundColor: "lightgray",
   },
 });
 
