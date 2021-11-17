@@ -30,18 +30,18 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onLayout, onLogin }) => {
       (await Random.getRandomBytesAsync(16)) as any
     );
     await SecureStore.setItemAsync(NONCE_KEY, nonce);
+    // SecureStore.getItemAsync(NONCE_KEY).then((savedNonce) => {
+    //   console.log(savedNonce);
+    // });
     return nonce;
   };
 
   const decodeToken = (token: string) => {
     const decodedToken: any = jwtDecoder(token);
-    console.log(decodedToken);
     const { nonce, sub, email, name, exp } = decodedToken;
 
     SecureStore.getItemAsync(NONCE_KEY).then((savedNonce) => {
-      // currently there is a problem with nonce matching
-      // if (savedNonce == nonce) {
-      if (savedNonce) {
+      if (savedNonce == nonce) {
         SecureStore.setItemAsync(
           ID_TOKEN_KEY,
           JSON.stringify({
@@ -60,7 +60,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onLayout, onLogin }) => {
   };
 
   const handleGetStartedPress = async () => {
-    const nonce = generateNonce();
+    const nonce = await generateNonce();
     AuthSession.startAsync({
       authUrl:
         `${AUTH_DOMAIN}/authorize?` +
@@ -69,7 +69,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onLayout, onLogin }) => {
           response_type: "id_token",
           scope: "openid profile email",
           redirect_uri: AuthSession.getRedirectUrl(),
-          nonce: nonce,
+          nonce,
         }),
     }).then((result: any) => {
       if (result.type === "success") {
