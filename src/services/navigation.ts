@@ -12,3 +12,4 @@ export type RootStackParamList = {
 }
 
 export const Stack = createNativeStackNavigator<RootStackParamList>();
+

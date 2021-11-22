@@ -13,6 +13,7 @@ import HomeScreen from "./screens/HomeScreen";
 import { Button } from "react-native-ui-lib";
 import * as Linking from "expo-linking";
 import PaymentScreen from "./screens/PaymentScreen";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
@@ -78,51 +79,53 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer linking={linking}>
-      <Stack.Navigator>
-        {token && user ? (
-          <>
-            <Stack.Screen
-              name={"Home"}
-              options={{
-                title: `${user.name}'s Todos`,
-                headerRight: () => (
-                  <Button
-                    onPress={handleLogout}
-                    label="logout"
-                    backgroundColor="lightgray"
+    <RootSiblingParent>
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator>
+          {token && user ? (
+            <>
+              <Stack.Screen
+                name={"Home"}
+                options={{
+                  title: `${user.name}'s Todos`,
+                  headerRight: () => (
+                    <Button
+                      onPress={handleLogout}
+                      label="logout"
+                      backgroundColor="lightgray"
+                    />
+                  ),
+                }}
+              >
+                {(props) => (
+                  <HomeScreen
+                    onLogout={handleLogout}
+                    token={token}
+                    user={user}
+                    {...props}
                   />
-                ),
-              }}
-            >
-              {(props) => (
-                <HomeScreen
-                  onLogout={handleLogout}
-                  token={token}
-                  user={user}
-                  {...props}
-                />
-              )}
-            </Stack.Screen>
-            <Stack.Screen name={"Payment"} options={{ headerShown: true }}>
-              {(props) => <PaymentScreen {...props} />}
-            </Stack.Screen>
-          </>
-        ) : (
-          <>
-            <Stack.Screen name={"Landing"} options={{ headerShown: false }}>
-              {(props) => (
-                <LandingScreen
-                  onLogin={handleLogin}
-                  onLayout={onLayoutRootView}
-                  {...props}
-                />
-              )}
-            </Stack.Screen>
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name={"Payment"} options={{ headerShown: true }}>
+                {(props) => <PaymentScreen {...props} />}
+              </Stack.Screen>
+            </>
+          ) : (
+            <>
+              <Stack.Screen name={"Landing"} options={{ headerShown: false }}>
+                {(props) => (
+                  <LandingScreen
+                    onLogin={handleLogin}
+                    onLayout={onLayoutRootView}
+                    {...props}
+                  />
+                )}
+              </Stack.Screen>
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RootSiblingParent>
   );
 }
 

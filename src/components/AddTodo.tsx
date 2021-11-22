@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { Button, TextField, View } from "react-native-ui-lib";
+import { Button, LoaderScreen, TextField, View } from "react-native-ui-lib";
 import { INSERT_TODO } from "../data/mutation";
 import { GET_TODOS } from "../data/queries";
 
@@ -27,15 +27,19 @@ const AddTodo: React.FC<AddTodoProps> = () => {
       </View>
       <Button
         onPress={() => {
-          insertTodo({
-            variables: { text },
-            refetchQueries: [{ query: GET_TODOS }],
-          });
-          setText("");
+          if (!loading && text) {
+            insertTodo({
+              variables: { text },
+              refetchQueries: [{ query: GET_TODOS }],
+            }).then(() => {
+              setText("");
+            });
+          }
         }}
-        disabled={loading || text === ""}
-        label="Add"
-      ></Button>
+        label={loading ? " " : "Add"}
+      >
+        {loading && <LoaderScreen size="small" color="white" />}
+      </Button>
     </View>
   );
 };

@@ -30,6 +30,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "# testing linking\nAuth0  and Apollo integration with expo"
+    "description": "Auth0  and Apollo integration with expo\nAnd Stripe integration"
   }
 }

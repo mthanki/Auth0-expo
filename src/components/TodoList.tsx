@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, LoaderScreen, View } from "react-native-ui-lib";
 import { useQuery } from "@apollo/client";
 import { GET_TODOS } from "../data/queries";
-import { FlatList } from "react-native";
 import TodoItem from "./TodoItem";
+import { Item } from "../types";
+import { Dimensions, FlatList, LayoutAnimation } from "react-native";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 interface TodoListProps {}
 
 const TodoList: React.FC<TodoListProps> = () => {
   const { loading, error, data } = useQuery(GET_TODOS);
+
+  useEffect(() => {
+    LayoutAnimation.easeInEaseOut();
+  }, [data]);
 
   if (loading)
     return (
@@ -33,11 +40,12 @@ const TodoList: React.FC<TodoListProps> = () => {
   }
 
   return (
-    <View width={400} br40 padding-20 centerV spread>
+    // Making the container full-width because items needs space to move left and right
+    <View width={SCREEN_WIDTH} br40 centerV spread>
       <FlatList
         data={data.todo}
         renderItem={({ item }) => <TodoItem item={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item: Item) => item.id.toString()}
       />
     </View>
   );
